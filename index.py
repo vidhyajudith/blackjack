@@ -132,54 +132,67 @@ def dealer_wins(player,dealer,chips):
 def push(player,dealer):
     print("PLAYER AND DEALER TIE. PUSH")
 
+
 while True:
     print("WELCOME TO BLACKJACK")
     deck=Deck()
     deck.shuffle()
-
-    player_hand=Hand()
-    player_hand.add_card(deck.deal())
-    player_hand.add_card(deck.deal())
-
-    dealer_hand=Hand()
-    dealer_hand.add_card(deck.deal())
-    dealer_hand.add_card(deck.deal())
-
     player_chips=Chips()
+    game_on=True
+    while game_on:
+        player_hand=Hand()
+        player_hand.add_card(deck.deal())
+        player_hand.add_card(deck.deal())
 
-    take_bet(player_chips)
-
-    show_some(player_hand,dealer_hand)
-    print("-----------------------")
-    while playing:
-
-        hit_or_stand(deck,player_hand)
-        show_some(player_hand,dealer_hand)
-        print('-----------------------')
-        if player_hand.value>21:
-            player_busts(player_hand,dealer_hand,player_chips)
+        dealer_hand=Hand()
+        dealer_hand.add_card(deck.deal())
+        dealer_hand.add_card(deck.deal())
+        
+        if player_chips.total==0:
+            print("No more chips available. Player OUT")
             break
+        take_bet(player_chips)
 
-    if player_hand.value <= 21:
-        while dealer_hand.value <=17:
-            hit(deck,dealer_hand)
-        show_all(player_hand,dealer_hand)
-        print('------------------------')
-        if dealer_hand.value >21:
-            dealer_busts(player_hand,dealer_hand,player_chips)
-        elif dealer_hand.value>player_hand.value:
-            dealer_wins(player_hand,dealer_hand,player_chips)
-        elif player_hand.value > dealer_hand.value:
-            player_wins(player_hand,dealer_hand,player_chips)
+        show_some(player_hand,dealer_hand)
+        print("-----------------------")
+        while playing:
+
+            hit_or_stand(deck,player_hand)
+            show_some(player_hand,dealer_hand)
+            print('-----------------------')
+            if player_hand.value>21:
+                player_busts(player_hand,dealer_hand,player_chips)
+                break
+
+        if player_hand.value <= 21:
+            while dealer_hand.value <=17:
+                hit(deck,dealer_hand)
+            show_all(player_hand,dealer_hand)
+            print('------------------------')
+            if dealer_hand.value >21:
+                dealer_busts(player_hand,dealer_hand,player_chips)
+            elif dealer_hand.value>player_hand.value:
+                dealer_wins(player_hand,dealer_hand,player_chips)
+            elif player_hand.value > dealer_hand.value:
+                player_wins(player_hand,dealer_hand,player_chips)
+            else:
+                push(player_hand,dealer_hand)
+                
+        print('\n Player remaining chips : {} '.format(player_chips.total))
+        new_round=input("Play again? y/n")
+        if new_round[0].lower()=='y':
+            playing=True
+            continue
         else:
-            push(player_hand,dealer_hand)
-            
-    print('\n Player remaining chips : {} '.format(player_chips.total))
-    new_game=input("Play again? y/n")
+            print("Thank you for playing ")
+            game_on=False
+        
+    print("Your winnings : {}".format(player_chips.total))
+    new_game=input("New Game? y/n")
     if new_game[0].lower()=='y':
         playing=True
         continue
     else:
         print("Thank you for playing ")
-        break
+        break  
 
