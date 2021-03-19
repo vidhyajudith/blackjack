@@ -187,7 +187,7 @@ while True:
             print("Thank you for playing ")
             game_on=False
         
-    print("Your winnings : {}".format(player_chips.total))
+    print("Your chips : {}".format(player_chips.total))
     new_game=input("New Game? y/n")
     if new_game[0].lower()=='y':
         playing=True
